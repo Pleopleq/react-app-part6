@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
 
-const PrintNumbers = ({contact}) =>{
-    return <li key={contact.name}> {contact}</li>
+const PrintNumbers = ({contact, index}) =>{
+    return <li key={index}> {contact}</li>
 }
 
 
@@ -22,11 +22,22 @@ const App = () =>{
 
     const AddNumber = (event) =>{
         event.preventDefault();
+
         const contactObj = {
             name: newName
+
         }
-        setPersons(persons.concat(contactObj));
-        setNewName('');
+
+        const onlyNames = persons.map(nameArr => nameArr.name);
+
+        if(onlyNames.indexOf(newName) > -1){
+            alert (`${newName} is already register`);
+            return
+        } else {
+            setPersons(persons.concat(contactObj));
+            setNewName('');
+            
+        }
     }
 
 
@@ -45,8 +56,8 @@ const App = () =>{
             </form>
             <h2>Numbers</h2>
             <ul>
-                {persons.map((person)=>
-                <PrintNumbers key={person} contact={person.name}/>
+                {persons.map((person, index)=>
+                <PrintNumbers key={index} contact={person.name}/>
                 )}
                 <div>debug: {newName}</div>
             </ul>
