@@ -1,10 +1,8 @@
 import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
-
-const PrintNumbers = ({contact, phone,  index}) =>{
-    return <li key={index}> {contact} - {phone}</li>
-}
-
+import PrintNumbers from './components/PrintNumbers'
+import SearchBar from './components/SearchBar'
+import ContactForm from './components/ContactForm'
 
 const App = () =>{
 
@@ -15,16 +13,27 @@ const App = () =>{
         { name: 'Derek' , number: '0929082309'},
         { name: 'Francisco' , number: '52345235'}
     ]);
-    const [newFilter , setNewFilter ] = useState([
-        'set a new filter'
-    ])
+
+    const [newFilter , setNewFilter ] = useState('');
+
     const [ newName, setNewName ] = useState( 
         'a new note...'
     );
+
     const [ newPhoneNum, setNewPhoneNum ] = useState(
         'Phone number'
     )
+    
+    //Search bar//
 
+    let contactsToShow = persons;
+    const searchQuery = newFilter;
+    const searchQueryToUpper = searchQuery.charAt(0).toUpperCase() + searchQuery.substring(1);
+
+    const filterPersons = contactsToShow.filter(el => el.name.includes(searchQueryToUpper));
+    contactsToShow = filterPersons;
+
+    //Search bar //
 
     const handleContactChange = event =>{
         setNewName(event.target.value);
@@ -33,10 +42,10 @@ const App = () =>{
     const handlePhoneChange =  event =>{
         setNewPhoneNum(event.target.value);
     }
+
     const handleFilterChange = event =>{
-        setNewFilter(event.target.value);
-        let searchQuery = event.target.value;
-    }
+     setNewFilter(event.target.value);
+     }
     
 
     const AddNumber = (event) =>{
@@ -63,35 +72,26 @@ const App = () =>{
     return(
         <div>
             <h1>Phonebook</h1>
-            <div>
-                Filter by name: <input
-                value={newFilter} 
-                onChange={handleFilterChange}/>
-            </div>
-            <form onSubmit={AddNumber}> 
-                <div>
-                    <h2>Add a new contact</h2>
-                    name: <input value={newName}
-                        onChange={handleContactChange}
-                    />
-                    phone: <input value={newPhoneNum}
-                        onChange={handlePhoneChange}
-                    />
-                </div>
-                <div>
-                    <button type='submit'>Add</button>
-                </div>
-            </form>
+            <SearchBar value={newFilter} onChange={handleFilterChange}/>
+
+            <h2>Add a new contact</h2>
+            
+            <ContactForm valueName={newName} 
+            onChangeName={handleContactChange}
+            valueNumber={newPhoneNum}
+            onChangeNum={handlePhoneChange}
+            onSubmit={AddNumber}/>
+
             <h2>Numbers</h2>
             <ul>
-                {persons.map((person, index)=>
+                {contactsToShow.map((person, index)=>
                 <PrintNumbers key={index} contact={person.name} phone={person.number}/>
-                )}
+            )}
             </ul>
-            <div>debug: {newFilter}</div>
         </div>
     )
 }
+
 ReactDOM.render(
     <App/>,
   document.getElementById('root')
