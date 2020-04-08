@@ -1,18 +1,22 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
+import axios from 'axios'
 import PrintNumbers from './components/PrintNumbers'
 import SearchBar from './components/SearchBar'
 import ContactForm from './components/ContactForm'
 
 const App = () =>{
 
-    const [persons, setPersons] = useState([
-        { name: 'Felix Anducho', number: '453929392' },
-        { name: 'Cesar' , number: '453230232' },
-        { name: 'Carlos' , number: '38929302'},
-        { name: 'Derek' , number: '0929082309'},
-        { name: 'Francisco' , number: '52345235'}
-    ]);
+   const [persons, setPersons] = useState([]);
+
+   useEffect(() =>{
+       axios
+       .get('http://localhost:3001/persons')
+       .then(response => {
+           console.log('Promise fulfilled!')
+           setPersons(response.data);
+       })
+   }, [])
 
     const [newFilter , setNewFilter ] = useState('');
 
