@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
-import axios from 'axios'
+import personService from './services/persons'
 import PrintNumbers from './components/PrintNumbers'
 import SearchBar from './components/SearchBar'
 import ContactForm from './components/ContactForm'
@@ -10,24 +10,18 @@ const App = () =>{
    const [persons, setPersons] = useState([]);
 
    useEffect(() =>{
-       axios
-       .get('http://localhost:3001/persons')
+       personService
+       .getAll()
        .then(response => {
-           console.log('Promise fulfilled!')
-           setPersons(response.data);
+        setPersons(response.data);
        })
    }, [])
+ 
+    const [ newFilter , setNewFilter] = useState('');
+    const [ newName, setNewName] = useState('');
+    const [ newPhoneNum, setNewPhoneNum] = useState('');
 
-    const [newFilter , setNewFilter ] = useState('');
 
-    const [ newName, setNewName ] = useState( 
-        'a new note...'
-    );
-
-    const [ newPhoneNum, setNewPhoneNum ] = useState(
-        'Phone number'
-    )
-    
     //Search bar//
 
     let contactsToShow = persons;
@@ -50,12 +44,18 @@ const App = () =>{
     const handleFilterChange = event =>{
      setNewFilter(event.target.value);
      }
+
+    const handleDeleteButton = (event) =>{
+        const deletedId = event.target.id
+        const deletedName = event.target.parentElement.childNodes[1].data;
+        removeNumber(deletedId, deletedName)
+    }
     
 
     const AddNumber = (event) =>{
         event.preventDefault();
 
-        const contactObj = {
+        const newContactObj = {
             name: newName,
             number: newPhoneNum
         }
@@ -66,12 +66,24 @@ const App = () =>{
             alert (`${newName} is already register`);
             return
         } else {
-            setPersons(persons.concat(contactObj));
-            setNewName('');
-            setNewPhoneNum('');
+            personService
+            .create(newContactObj)
+            .then(response =>{
+                setPersons(persons.concat(response.data));
+                setNewName('');
+                setNewPhoneNum('');
+            })
         }
     }
-
+    const removeNumber = (id, name) =>{
+        const result =window.confirm(`Are you sure you want to delete ${name}`)
+        if(result){
+            personService
+            .deleteContact(id)
+            .then(response =>{
+            })
+        }
+    }
 
     return(
         <div>
@@ -89,7 +101,7 @@ const App = () =>{
             <h2>Numbers</h2>
             <ul>
                 {contactsToShow.map((person, index)=>
-                <PrintNumbers key={index} contact={person.name} phone={person.number}/>
+                <PrintNumbers contact={person.name} phone={person.number} onClick={handleDeleteButton} key={index} id={person.id}/>
             )}
             </ul>
         </div>
