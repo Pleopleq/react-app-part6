@@ -10,7 +10,7 @@ const App = () =>{
    const [persons, setPersons] = useState([]);
 
    useEffect(() =>{
-       personService
+    personService
        .getAll()
        .then(response => {
         setPersons(response.data);
@@ -20,7 +20,6 @@ const App = () =>{
     const [ newFilter , setNewFilter] = useState('');
     const [ newName, setNewName] = useState('');
     const [ newPhoneNum, setNewPhoneNum] = useState('');
-
 
     //Search bar//
 
@@ -42,13 +41,24 @@ const App = () =>{
     }
 
     const handleFilterChange = event =>{
-     setNewFilter(event.target.value);
-     }
+        setNewFilter(event.target.value);
+    }
 
     const handleDeleteButton = (event) =>{
-        const deletedId = event.target.id
-        const deletedName = event.target.parentElement.childNodes[1].data;
-        removeNumber(deletedId, deletedName)
+        const contactSelected = event.target.id;
+        const filteredContact = personService.getOneById(contactSelected, persons)
+        const result = window.confirm(`Are you sure you want to delete ${filteredContact[0].name}`)
+            if(result){
+                personService
+                .deleteContact(filteredContact[0].id)
+                .then(response =>{
+                    personService
+                    .getAll()
+                    .then(response => {
+                     setPersons(response.data);
+                    })
+            })
+        }
     }
     
 
@@ -72,15 +82,6 @@ const App = () =>{
                 setPersons(persons.concat(response.data));
                 setNewName('');
                 setNewPhoneNum('');
-            })
-        }
-    }
-    const removeNumber = (id, name) =>{
-        const result =window.confirm(`Are you sure you want to delete ${name}`)
-        if(result){
-            personService
-            .deleteContact(id)
-            .then(response =>{
             })
         }
     }
