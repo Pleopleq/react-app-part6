@@ -7,8 +7,6 @@ import ContactForm from './components/ContactForm'
 
 const App = () =>{
 
-   const [persons, setPersons] = useState([]);
-
    useEffect(() =>{
     personService
        .getAll()
@@ -16,7 +14,7 @@ const App = () =>{
         setPersons(response.data);
        })
    }, [])
- 
+    const [ persons, setPersons] = useState([]);
     const [ newFilter , setNewFilter] = useState('');
     const [ newName, setNewName] = useState('');
     const [ newPhoneNum, setNewPhoneNum] = useState('');
@@ -73,8 +71,21 @@ const App = () =>{
         const onlyNames = persons.map(nameArr => nameArr.name);
 
         if(onlyNames.indexOf(newName) > -1 ){
-            alert (`${newName} is already register`);
-            return
+            const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+            if(result){
+                const replaceOld = persons.filter(person => person.name === newName);
+                personService
+                .updateContact(replaceOld[0].id, newContactObj)
+                .then(response =>{
+                        personService
+                        .getAll()
+                        .then(response => {
+                        setPersons(response.data);
+                        setNewName('');
+                        setNewPhoneNum('');
+                    })
+                })
+            }
         } else {
             personService
             .create(newContactObj)
