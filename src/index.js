@@ -5,17 +5,8 @@ import personService from './services/persons'
 import PrintNumbers from './components/PrintNumbers'
 import SearchBar from './components/SearchBar'
 import ContactForm from './components/ContactForm'
+import Notification from './components/Notification'
 
-const Notification = ({message, className}) => {
-    if(message === null){
-        return null
-    }
-    return (
-        <div className={className}>
-            {message}
-        </div>
-    )
-}
 
 const App = () =>{
 
@@ -26,6 +17,7 @@ const App = () =>{
         setPersons(response.data);
        })
    }, [])
+
     const [ persons, setPersons] = useState([]);
     const [ newFilter , setNewFilter] = useState('');
     const [ newName, setNewName] = useState('');
@@ -77,7 +69,7 @@ const App = () =>{
                     `)
                     //HTTP Call to refresh the contacts
                     personService
-                    .getAll().then(response => {setPersons(response.data);})
+                    .getAll().then(response => {setPersons(response.data)})
     
                     setTimeout(() => {
                         setFailMessage(null)
