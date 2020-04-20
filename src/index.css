@@ -1,0 +1,18 @@
+.success-alert{
+    background-color: #b3ffb3;
+    padding: 1.5rem;
+    border-radius: 2rem;
+    margin: 1rem 1rem;
+    color:grey;
+    text-shadow: 1px 1px black;
+}
+
+.fail-alert{
+    background-color: #ff8080;
+    padding: 1.5rem;
+    border-radius: 2rem;
+    margin: 1rem 1rem;
+    color:grey;
+    text-shadow: 1px 1px black;
+}
+

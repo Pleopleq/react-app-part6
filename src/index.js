@@ -1,9 +1,21 @@
 import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
+import './index.css'
 import personService from './services/persons'
 import PrintNumbers from './components/PrintNumbers'
 import SearchBar from './components/SearchBar'
 import ContactForm from './components/ContactForm'
+
+const Notification = ({message, className}) => {
+    if(message === null){
+        return null
+    }
+    return (
+        <div className={className}>
+            {message}
+        </div>
+    )
+}
 
 const App = () =>{
 
@@ -18,6 +30,8 @@ const App = () =>{
     const [ newFilter , setNewFilter] = useState('');
     const [ newName, setNewName] = useState('');
     const [ newPhoneNum, setNewPhoneNum] = useState('');
+    const [ successMessage, setSuccessMessage] = useState(null);
+    const [ failMessage, setFailMessage] = useState(null);
 
     //Search bar//
 
@@ -53,9 +67,23 @@ const App = () =>{
                     personService
                     .getAll()
                     .then(response => {
-                     setPersons(response.data);
+                    setPersons(response.data);
                     })
-            })
+                })
+                .catch(error =>{
+                    console.log(error)
+                    setFailMessage(`
+                    Information of ${filteredContact[0].name} has already been removed from the server
+                    `)
+                    //HTTP Call to refresh the contacts
+                    personService
+                    .getAll().then(response => {setPersons(response.data);})
+    
+                    setTimeout(() => {
+                        setFailMessage(null)
+                        
+                    }, 4000);
+                })
         }
     }
     
@@ -90,6 +118,10 @@ const App = () =>{
             personService
             .create(newContactObj)
             .then(response =>{
+                setSuccessMessage(`${response.data.name} added to the contact list!`)
+                setTimeout(() => {
+                    setSuccessMessage(null)
+                }, 4000);
                 setPersons(persons.concat(response.data));
                 setNewName('');
                 setNewPhoneNum('');
@@ -100,6 +132,8 @@ const App = () =>{
     return(
         <div>
             <h1>Phonebook</h1>
+            <Notification message={successMessage} className={'success-alert'}></Notification>
+            <Notification message={failMessage} className={'fail-alert'}></Notification>
             <SearchBar value={newFilter} onChange={handleFilterChange}/>
 
             <h2>Add a new contact</h2>
