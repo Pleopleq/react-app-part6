@@ -15,7 +15,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "dev" : "nodemon router.js",  
+    "dev": "nodemon router.js",
     "router": "node router.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
