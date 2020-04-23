@@ -9,7 +9,7 @@ import Notification from './components/Notification'
 
 
 const App = () =>{
-
+    
    useEffect(() =>{
     personService
        .getAll()
