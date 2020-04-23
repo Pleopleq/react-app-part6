@@ -1,1 +1,3 @@
-web: npm run server
+
+web: npm run router
+server: npm run server
