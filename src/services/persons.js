@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://warm-tor-69264.herokuapp.com/persons';
+const baseURL = 'http://localhost:3000/persons';
 
 const getAll = () =>{
     return axios.get(baseURL);
