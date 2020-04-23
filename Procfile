@@ -1,2 +1,2 @@
-web: npm run router
-server: npm run server
+web: node router.js
+server: node server.js
