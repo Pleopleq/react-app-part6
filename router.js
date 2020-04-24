@@ -11,7 +11,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/persons', (res, req) =>{
-  res.send('db.json')
+  res.json('db.json')
 })
 
 
