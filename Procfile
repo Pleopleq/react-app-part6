@@ -1,2 +1,1 @@
-web: node router.js
-server: node server.js
+web: npm run router
