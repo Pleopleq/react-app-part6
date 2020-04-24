@@ -10,6 +10,10 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+app.get('/persons', (res, req) =>{
+  res.send('db.json')
+})
+
 
 app.listen(process.env.PORT || 3000, () =>{
     console.log('Server up')
