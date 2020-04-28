@@ -50,33 +50,32 @@ const App = () =>{
 
     const handleDeleteButton = (event) =>{
         const contactSelected = event.target.id;
-        const filteredContact = personService.getOneById(contactSelected, persons)
-        const result = window.confirm(`Are you sure you want to delete ${filteredContact[0].name}`)
-            if(result){
-                personService
-                .deleteContact(filteredContact[0].id)
-                .then(response =>{
-                    personService
-                    .getAll()
-                    .then(response => {
-                    setPersons(response.data);
-                    })
-                })
-                .catch(error =>{
-                    console.log(error)
-                    setFailMessage(`
-                    Information of ${filteredContact[0].name} has already been removed from the server
-                    `)
-                    //HTTP Call to refresh the contacts
-                    personService
-                    .getAll().then(response => {setPersons(response.data)})
+         const result = window.confirm(`Are you sure you want to delete this contact?`)
+             if(result){
+                 personService
+                 .deleteContact(contactSelected)
+                 .then(response =>{
+                     personService 
+                     .getAll()
+                     .then(response => {
+                     setPersons(response.data);
+                     })
+                 })
+                 .catch(error =>{
+                     console.log(error)
+                     setFailMessage(`
+                     This contact is already removed from the server
+                     `)
+                     //HTTP Call to refresh the contacts
+                     personService
+                     .getAll().then(response => {setPersons(response.data)})
     
-                    setTimeout(() => {
-                        setFailMessage(null)
+                     setTimeout(() => {
+                         setFailMessage(null)
                         
-                    }, 4000);
-                })
-        }
+                     }, 4000);
+                 })
+         }
     }
     
 
