@@ -110,12 +110,18 @@ const App = () =>{
             .create(newContactObj)
             .then(response =>{
                 setSuccessMessage(`${response.data.name} added to the contact list!`)
-                setTimeout(() => {
-                    setSuccessMessage(null)
-                }, 4000);
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 4000);
                 setPersons(persons.concat(response.data));
                 setNewName('');
                 setNewPhoneNum('');
+            })
+            .catch(error => {
+                setFailMessage(error.response.data)
+                setTimeout(() => {
+                     setFailMessage(null)
+                 }, 4000);
             })
         }
     }
