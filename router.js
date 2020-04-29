@@ -33,7 +33,7 @@ app.get('/persons/:id', (req, res, next) =>{
 
 //POST A NEW CONTACT ROUTE//
 
-app.post('/persons', (req, res) =>{
+app.post('/persons', (req, res, next) =>{
   const body = req.body
   
   if(body.name === undefined || body.number === undefined){
@@ -44,9 +44,11 @@ app.post('/persons', (req, res) =>{
     number: body.number
   })
 
-  newPerson.save().then(savedPerson =>{
+  newPerson.save()
+  .then(savedPerson =>{
     res.json(savedPerson.toJSON())
   })
+    .catch(error => res.status(400).send(error.errors.name.message))
 })
 
 //DELETE ROUTE//
@@ -86,9 +88,15 @@ app.use(unknownEndpoint)
 const errorHandler = (error, req, res, next) =>{
   console.log(error.message)
 
-  if(error.name === 'CastError'){
+  if(error.name === 'CastError')
+  {
     return res.status(400).send({ error: 'malformated id'})
   }
+
+  else if(error.name === 'ValidationError')
+  {
+    return res.status(400).send({error: 'This person already exist'})
+  }  
 
   next(error)
 }
