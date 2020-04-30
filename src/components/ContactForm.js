@@ -1,21 +1,21 @@
 import React from 'react'
 
-const ContactForm = ({onSubmit, valueName, onChangeName, valueNumber, onChangeNum}) =>{
-    return (
+const ContactForm = ({ onSubmit, valueName, onChangeName, valueNumber, onChangeNum }) =>{
+  return (
     <form onSubmit={onSubmit}> 
-        <div>
+      <div>
             name: <input value={valueName}
-                onChange={onChangeName}
-            />
+          onChange={onChangeName}
+        />
             phone: <input value={valueNumber}
-                onChange={onChangeNum}
-            />
-            <div>
-                <button type='submit'>Add</button>
-            </div>
+          onChange={onChangeNum}
+        />
+        <div>
+          <button type='submit'>Add</button>
         </div>
+      </div>
     </form>
-    )
+  )
 }
 
 
